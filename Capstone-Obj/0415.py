@@ -38,6 +38,14 @@ def load_data():
         rent_ids.append(rent_id)
     print("rent_ids =", rent_ids)
 
+    # results = pd.DataFrame(results)
+    # print(results)
+    print("load_data success")
+    project_car.close()  # 연결 닫기
+    print("Database Connect End")
+    return rent_ids
+
+def update_data(rent_ids_list):
     # rent_ids 리스트 내에 rent_id 들이 있고 그걸 어떻게 사용?
     # 모든 데베에 접근해서 계속 딥러닝 돌리기
     # while문? 아무튼 딥러닝된 파일 이름을 대조해보면서 반복하기
@@ -49,8 +57,14 @@ def load_data():
 
     name_list = ["d_before_front.jpg", "d_before_back.jpg", "d_before_drive_front.jpg", "d_before_drive_back.jpg",
                  "d_before_passenger_front.jpg", "d_before_passenger_back.jpg", "d_after_front.jpg", "d_after_back.jpg",
-                 "d_after_drive_front.jpg", "d_after_drive_back.jpg", "d_after_passenger_front.jpg", "d_after_passenger_back.jpg"]
-    count = 0
+                 "d_after_drive_front.jpg", "d_after_drive_back.jpg", "d_after_passenger_front.jpg",
+                 "d_after_passenger_back.jpg"]
+
+    # 전체 데베 탐색은 load data를 반복 돌립시다 while True:
+    for count in rent_ids_list:
+        print("count rent_id :", count)
+        # 데베에 사진 접근
+
     # for result in results:
     #     print("result :",result)
     #     if rent_id == result['id']:
@@ -69,12 +83,6 @@ def load_data():
     #                 count = count+1
     #             else:
     #                 break
-
-    # results = pd.DataFrame(results)
-    # print(results)
-    print("load_data success")
-    project_car.close()  # 연결 닫기
-    print("Database Connect End")
 
 
 def save_data(Rent_rent_id):
@@ -116,11 +124,15 @@ def save_data(Rent_rent_id):
     print("Database Connect End")
     print("save_data success")
 
-###################################
+#########################################################################################################
 # main 실행
 print("######## main 실행 #######")
-Rent_rent_id = 6
-print(type(Rent_rent_id))
+# Rent_rent_id = 6
+# print(type(Rent_rent_id))
 # save_data(Rent_rent_id)
 print("rent 테이블 데이터 로드")
 load_data()
+rent_ids_list = load_data()
+print(type(rent_ids_list[0]))
+print("rent_ids 를 통해 update_data 실행 및 딥러닝")
+update_data(rent_ids_list)
