@@ -21,7 +21,7 @@ def object_detection(url, cursor, testpython, name_list, rent_id):
         classes = [line.strip() for line in f.readlines()]
 
     layer_names = net.getLayerNames()
-    output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+    output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
 
     # @ 색과 폰트 color, font
     color_lists = np.random.uniform(0, 255, size=(len(classes), 3))  # 색 80가지 랜덤으로
@@ -100,7 +100,7 @@ def object_detection(url, cursor, testpython, name_list, rent_id):
     # ! 이미지 출력 저장
     cv2.imshow("Detected Img", img)
 
-    save_dir = "/Users/jongukyang/Desktop/" + name_list
+    save_dir = "C:\\Users\\User\\Desktop\\ObjectDetect-main\\Capstone-Obj\\dimg\\" + name_list
     cv2.imwrite(save_dir, img)
 
     # cv2.waitKey(0)  # 키 입력을 기다리는 함수
@@ -113,8 +113,8 @@ def load_data():
         host='localhost',
         port=3306,
         user='root',
-        password='whddnr15',
-        db='pycharm',
+        password='1234',
+        db='car',
         charset='utf8',
         local_infile=1
     )
@@ -158,32 +158,13 @@ def load_data():
     print("Database Connect End")
 
 
-# def save_data():
-#     testpython = pymysql.connect(
-#         host='localhost',
-#         port=3306,
-#         user='root',
-#         password='whddnr15',
-#         db='pycharm',
-#         charset='utf8',
-#         local_infile=1 ) # DB 연동
-#     cursor = testpython.cursor() # 디폴트 커서 생성
-#     # 전달받은 고객의 rent_id 확인 후 저장
-#     sql = "INSERT INTO carimg(id, imgurl, imgurl2, imgurl3) VALUES(16, '/Users/jongukyang/Desktop/hello.jpeg', '/Users/jongukyang/Desktop/hello2.jpeg', '/Users/jongukyang/Desktop/hello3.jpeg');"
-#     cursor.execute(sql)
-#     testpython.commit()
-#     # print('rowcount: ', testpython.rowcount)
-#     testpython.close()  # 연결 닫기
-#     print("save_data success")
-
-
 def update_data():
     testpython = pymysql.connect(
         host='localhost',
         port=3306,
         user='root',
-        password='whddnr15',
-        db='pycharm',
+        password='1234',
+        db='car',
         charset='utf8',
         local_infile=1 ) # DB 연동
     cursor = testpython.cursor() # 디폴트 커서 생성
@@ -204,8 +185,8 @@ def load_id_data(rent_id):
         host='localhost',
         port=3306,
         user='root',
-        password='whddnr15',
-        db='pycharm',
+        password='1234',
+        db='car',
         charset='utf8',
         local_infile=1
     )
@@ -243,7 +224,7 @@ def load_id_data(rent_id):
 # DB에 변경된 파일 저장
 # 덮어쓰기 형식?
 load_data() # 데이터 로드
-load_id_data(16)
+# load_id_data(16)
 
 # 변수 설정
 # rent_id = 9
