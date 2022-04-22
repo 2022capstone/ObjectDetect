@@ -125,7 +125,7 @@ def update_data(rent_ids_lists, rent_id_data):
                 cursor.execute(sql)
                 project_car.commit()
                 a = a+1
-                if a == 13:
+                if a == 12:
                     break
 
 
@@ -398,7 +398,7 @@ rent_ids_lists = load_data()
 rent_id_data = load_last_rent_id_data()
 # print(type(rent_ids_lists[0]))
 print("rent_ids를 가져와 마지막 인덱스 골라 save 실행")
-save_data(rent_ids_lists)
+# save_data(rent_ids_lists)
 print("rent_ids 를 통해 update_data 실행 및 딥러닝")
 update_data(rent_ids_lists, rent_id_data)
 # update_data2(rent_ids_lists, rent_id_data)
