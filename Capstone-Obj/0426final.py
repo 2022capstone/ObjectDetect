@@ -124,16 +124,13 @@ def update_data(rent_id_data):
                 continue
             else:
                 print("items :", db_column_idx, key, values)
-
+                # 여기서 컬럼 이름 화긴 후 detect or pass 수행
                 save_dir_img = obj_detect(values, db_column_idx)
-
                 print("sava_dir_img : ", save_dir_img)
-
                 sql = "update rent_compare_img set " + db_column[db_column_idx] + " = '" + save_dir_img + "' where Rent_rent_id = " + str(last_rent_id) + ";"
                 print(sql)
                 cursor.execute(sql)
                 project_car.commit()
-
                 db_column_idx = db_column_idx + 1
                 if db_column_idx == 13:
                     break
@@ -296,29 +293,17 @@ def obj_detect(values, db_column_idx):
     cv2.imwrite(save_dir_img, img)
 
     return save_dir_img
-    # cv2.waitKey(0)  # 키 입력을 기다리는 함수
-    # cv2.destroyAllWindows()  # 키 입력되면 창 닫기 종료
-    # update_data()
-
 
 #########################################################################################################
 
 # main 실행
-
 while True:
     print("######## main 실행 #######")
-    # print("save_data start")
-    # Rent_rent_id = 7
-    # print(type(Rent_rent_id))
-    # save_data(Rent_rent_id)
     print("rent 테이블 데이터 로드")
     print("load_data")
     rent_ids_lists = load_data()  # rent id list 전체
     print(rent_ids_lists)
     rent_id_data = load_last_rent_id_data()  # 마지막 rent id 번호
-    # print(type(rent_ids_lists[0]))
-    # print("rent_ids를 가져와 마지막 인덱스 골라 save 실행")
-    # save_data(rent_ids_lists)
     print("rent_id 를 통해 update_data 실행 및 딥러닝")
     update_data(rent_id_data)
     print("Delay 10s")
