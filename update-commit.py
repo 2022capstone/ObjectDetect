@@ -3,13 +3,14 @@ import cv2
 import numpy as np
 import time
 
-obj_detect_dir_path = "C:/Users/User/Desktop/ObjectDetect-main/userId/detectImg/"
+# obj_detect_dir_path = "C:/Users/nyh71/Desktop/ObjectDetect-main/userId/detectImg/"
+obj_detect_dir_path = "C:/Users/nyh71/Desktop/ObjectDetect-main/rent/"
 
-name_lists = ["", "before_front.png", "before_back.png", "before_drive_front.png", "before_drive_back.png",
-              "before_passenger_front.png", "before_passenger_back.png", "after_front.png",
-              "after_back.png",
-              "after_drive_front.png", "after_drive_back.png", "after_passenger_front.png",
-              "after_passenger_back.png"]
+name_lists = ["", "beforeFront.png", "beforeBack.png", "beforeDriveFront.png", "beforeDriveBack.png",
+              "beforePassengerFront.png", "beforePassengerBack.png", "afterFront.png",
+              "afterBack.png",
+              "afterDriveFront.png", "afterDriveBack.png", "afterPassengerFront.png",
+              "afterPassengerBack.png"]
 
 db_column = ["", "before_front", "before_back", "before_drive_front", "before_drive_back",
              "before_passenger_front", "before_passenger_back", "after_front", "after_back",
@@ -24,7 +25,7 @@ def load_data():
         host='localhost',
         port=3306,
         user='root',
-        password='1234',
+        password='003674',
         db='project_car',
         charset='utf8',
         local_infile=1
@@ -73,7 +74,7 @@ def update_data(rent_id_data):
         host='localhost',
         port=3306,
         user='root',
-        password='1234',
+        password='003674',
         db='project_car',
         charset='utf8',
         local_infile=1
@@ -102,7 +103,7 @@ def update_data(rent_id_data):
             else:
                 print("items :", db_column_idx, key, values)
                 # 여기서 컬럼 이름 화긴 후 detect or pass 수행
-                save_dir_img_path = obj_detect(values, db_column_idx)
+                save_dir_img_path = obj_detect(values, db_column_idx, rent_id_data)
                 print("sava_dir_img : ", save_dir_img_path)
                 # 데이터베이스에 업데이트
                 # 이미지 path
@@ -124,7 +125,7 @@ def update_data(rent_id_data):
     print("#################################################################################################")
 
 
-def obj_detect(values, db_column_idx):
+def obj_detect(values, db_column_idx, rent_id_data):
     file_name = values
     weights_file = "custom-train-yolo3_best.weights"
     cfg_file = "custom-train-yolo3.cfg"
@@ -145,7 +146,7 @@ def obj_detect(values, db_column_idx):
         classes = [line.strip() for line in f.readlines()]
 
     layer_names = net.getLayerNames()
-    output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+    output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
     # @ 색과 폰트 color, font
     color_lists = np.random.uniform(0, 255, size=(len(classes), 3))  # 색 80가지 랜덤으로
@@ -229,9 +230,9 @@ def obj_detect(values, db_column_idx):
     print("=== A frame took {:.3f} seconds".format(process_time))
 
     # ! 이미지 출력 저장
-    cv2.imshow("Detected Img", img)
-
-    save_dir_img_path = obj_detect_dir_path + name_lists[db_column_idx]
+    # cv2.imshow("Detected Img", img)
+    # save_dir_img_path = obj_detect_dir_path + name_lists[db_column_idx]
+    save_dir_img_path = obj_detect_dir_path + str(rent_id_data) + "/" + name_lists[db_column_idx]
     cv2.imwrite(save_dir_img_path, img)
 
     return [save_dir_img_path, scratch_num]
@@ -252,4 +253,4 @@ while True:
         # rent 테이블과 rent_compare_img 테이블에서 rent_id가 같은거 찾아서 update_data()실행
         match_rent_id()
         print("Delay 10s")
-        time.sleep(10)
+        # time.sleep(20)
