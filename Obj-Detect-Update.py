@@ -15,6 +15,7 @@ name_lists = ["", "beforeFront.png", "beforeBack.png", "beforeDriveFront.png", "
 db_column = ["", "before_front", "before_back", "before_drive_front", "before_drive_back",
              "before_passenger_front", "before_passenger_back", "after_front", "after_back",
              "after_drive_front", "after_drive_back", "after_passenger_front", "after_passenger_back"]
+
 db_column_s = ["", "before_front_count", "before_back_count", "before_drive_front_count", "before_drive_back_count",
              "before_passenger_front_count", "before_passenger_back_count", "after_front_count", "after_back_count",
              "after_drive_front_count", "after_drive_back_count", "after_passenger_front_count", "after_passenger_back_count"]
@@ -34,8 +35,8 @@ def load_data():
     cursor = project_car.cursor(pymysql.cursors.DictCursor)
 
     # rent테이블 중 rent_status가 6인 것 만 로드
-    # sql = "SELECT rent_id FROM rent where rent_status=6 and div = 0;"
-    sql = "SELECT rent_id FROM rent where rent_status=6;"
+    sql = "SELECT rent_id FROM rent where rent_status=6 and detect_div=0;"
+    # sql = "SELECT rent_id FROM rent where rent_status=6;"
     cursor.execute(sql)
     results_id = cursor.fetchall()
     print("Rent_id 가 6인 results :", results_id)  # list
@@ -117,6 +118,9 @@ def update_data(rent_id_data):
                 sql2 = "update rent_scratch_count set " + db_column_s[db_column_idx] + " = '" + str(save_dir_img_path[1]) + "' where rent_id = " + str(rent_id_data) + ";"
                 print(sql2)
                 cursor.execute(sql2)
+                sql3 = "update rent set detect_div=1 where rent_id = " + str(rent_id_data) + ";"
+                print(sql3)
+                cursor.execute(sql3)
                 project_car.commit()
                 db_column_idx = db_column_idx + 1
                 if db_column_idx == 13:
@@ -251,6 +255,7 @@ while True:
     rent_ids_lists = load_data()
     print("main :" , rent_ids_lists)
     if not rent_ids_lists:
+        print("Detect를 수행할 수 있는 이미지가 없습니다.")
         time.sleep(10) # 디텍트 할거 없으면 딜레이 걸기
         continue
     else:
