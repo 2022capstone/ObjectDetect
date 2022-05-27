@@ -1,0 +1,5 @@
+classes = 3
+train = /content/drive/MyDrive/darknet/custom/train.txt
+valid = /content/drive/MyDrive/darknet/custom/test.txt
+names = /content/drive/MyDrive/darknet/custom/classes.names
+backup = backup
