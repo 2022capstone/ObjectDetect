@@ -3,18 +3,22 @@ import cv2
 import numpy as np
 import time
 
-obj_detect_dir_path = "C:/Users/nyh71/Desktop/ObjectDetect-main/rent/"
+# obj_detect_dir_path = "C:/Users/nyh71/Desktop/ObjectDetect-main/rent/"
+obj_detect_dir_path = "C:/Users/nyh71/IdeaProjects/Project_API/src/main/resources/images/rent/"
 
+# DB rent_comapre_img 테이블에서 찾을 사진 이름
 name_lists = ["", "beforeFront.png", "beforeBack.png", "beforeDriveFront.png", "beforeDriveBack.png",
               "beforePassengerFront.png", "beforePassengerBack.png", "afterFront.png",
               "afterBack.png",
               "afterDriveFront.png", "afterDriveBack.png", "afterPassengerFront.png",
               "afterPassengerBack.png"]
 
+# rent_compare_img 테이블 컬럼 이름
 db_column = ["", "before_front", "before_back", "before_drive_front", "before_drive_back",
              "before_passenger_front", "before_passenger_back", "after_front", "after_back",
              "after_drive_front", "after_drive_back", "after_passenger_front", "after_passenger_back"]
 
+# rent_scartch_num 테이블 컬럼 이름
 db_column_s = ["", "before_front_count", "before_back_count", "before_drive_front_count", "before_drive_back_count",
                "before_passenger_front_count", "before_passenger_back_count", "after_front_count", "after_back_count",
                "after_drive_front_count", "after_drive_back_count", "after_passenger_front_count",
@@ -38,13 +42,13 @@ def load_data():
     sql = "SELECT rent_id FROM rent where rent_status=6 and detect_div=0;"
     cursor.execute(sql)
     results_id = cursor.fetchall()
-    print("Rent_id 가 6인 results :", results_id)  # list
+    print("rent_status = 6 and detect_idv = 0 => rent_id results :", results_id)  # list
 
     # rent_compare_img 테이블에 div 라는 컬럼 추가해서 0이면 detect수행 전 / 1이면 수행 완료
 
     # 만약 rent_id가 없으면 실행 중지
     if not results_id:
-        print("nothing Rent_status == 6")
+        print("################# Nothing Rent_status == 6 or detect_div == 0 #####################")
         return 0  # main while루프로 0 값 전달
     else:
         # rent_status 가 6인 rent id 저장
@@ -61,6 +65,7 @@ def load_data():
 
 
 def match_rent_id():
+    print("################ Match the Rent_id ####################")
     # rent_ids_lists 를 가져왔음 그건 딥러닝 수행 전 데이터임
     for i in range(len(rent_ids_lists)):
         if (i == len(rent_ids_lists)):
@@ -117,13 +122,17 @@ def update_data(rent_id_data):
                     save_dir_img_path[1]) + "' where rent_id = " + str(rent_id_data) + ";"
                 print(sql2)
                 cursor.execute(sql2)
-                sql3 = "update rent set detect_div=1 where rent_id = " + str(rent_id_data) + ";"
-                print(sql3)
-                cursor.execute(sql3)
+                # sql3 = "update rent set detect_div=1 where rent_id = " + str(rent_id_data) + ";"
+                # print(sql3)
+                # cursor.execute(sql3)
                 project_car.commit()
                 db_column_idx = db_column_idx + 1
                 if db_column_idx == 13:
                     break
+    sql3 = "update rent set detect_div=1 where rent_id = " + str(rent_id_data) + ";"
+    print(sql3)
+    cursor.execute(sql3)
+    project_car.commit()
 
     project_car.close()  # 연결 닫기
     print("Database Connect End")
@@ -253,7 +262,8 @@ while True:
     print("main :", rent_ids_lists)
     if not rent_ids_lists:
         print("Detect를 수행할 수 있는 이미지가 없습니다.")
-        time.sleep(10)  # 디텍트 할거 없으면 딜레이 걸기
+        time.sleep(5)  # 디텍트 할거
+        # 없으면 딜레이 걸기
         continue
     else: # 데이터가 있으면
         # rent 테이블과 rent_compare_img 테이블에서 rent_id가 같은거 찾아서 update_data()실행

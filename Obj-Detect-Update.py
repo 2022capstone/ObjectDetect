@@ -35,7 +35,7 @@ def load_data():
     cursor = project_car.cursor(pymysql.cursors.DictCursor)
 
     # rent테이블 중 rent_status가 6인 것 만 로드
-    sql = "SELECT rent_id FROM rent where rent_status=6 and detect_div=0;"
+    sql = "SELECT rent_id FROM rent WHERE rent_status=6 and detect_div=0;"
     # sql = "SELECT rent_id FROM rent where rent_status=6;"
     cursor.execute(sql)
     results_id = cursor.fetchall()
@@ -92,7 +92,6 @@ def update_data(rent_id_data):
     print("rent_compare_img find sql = ", sql)
     cursor.execute(sql)
     results_data = cursor.fetchall()
-    print("results_data :", results_data)
 
     for data in results_data:
         # print("rent_id_data :", key, values)
@@ -118,6 +117,7 @@ def update_data(rent_id_data):
                 sql2 = "update rent_scratch_count set " + db_column_s[db_column_idx] + " = '" + str(save_dir_img_path[1]) + "' where rent_id = " + str(rent_id_data) + ";"
                 print(sql2)
                 cursor.execute(sql2)
+                # 딥러닝 수행 여부 1로 바꾸
                 sql3 = "update rent set detect_div=1 where rent_id = " + str(rent_id_data) + ";"
                 print(sql3)
                 cursor.execute(sql3)
