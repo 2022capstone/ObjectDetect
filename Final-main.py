@@ -7,11 +7,17 @@ import time
 obj_detect_dir_path = "C:/Users/nyh71/IdeaProjects/Project_API/src/main/resources/images/rent/"
 
 # DB rent_comapre_img 테이블에서 찾을 사진 이름
-name_lists = ["", "beforeFront.png", "beforeBack.png", "beforeDriveFront.png", "beforeDriveBack.png",
-              "beforePassengerFront.png", "beforePassengerBack.png", "afterFront.png",
-              "afterBack.png",
-              "afterDriveFront.png", "afterDriveBack.png", "afterPassengerFront.png",
-              "afterPassengerBack.png"]
+# name_lists = ["", "beforeFront.png", "beforeBack.png", "beforeDriveFront.png", "beforeDriveBack.png",
+#               "beforePassengerFront.png", "beforePassengerBack.png", "afterFront.png",
+#               "afterBack.png",
+#               "afterDriveFront.png", "afterDriveBack.png", "afterPassengerFront.png",
+#               "afterPassengerBack.png"]
+
+name_lists = ["", "DbeforeFront.png", "DbeforeBack.png", "DbeforeDriveFront.png", "DbeforeDriveBack.png",
+              "DbeforePassengerFront.png", "DbeforePassengerBack.png", "DafterFront.png",
+              "DafterBack.png",
+              "DafterDriveFront.png", "DafterDriveBack.png", "DafterPassengerFront.png",
+              "DafterPassengerBack.png"]
 
 # rent_compare_img 테이블 컬럼 이름
 db_column = ["", "before_front", "before_back", "before_drive_front", "before_drive_back",
@@ -229,8 +235,8 @@ def obj_detect(values, db_column_idx, rent_id_data):
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]  # 좌측 x, 상단 y, 우측 x, 하단 y 좌표
-            # object_lable = "{} : {:0.4f}".format(classes[class_ids[i]], confidences[i])
-            object_lable = "{}".format(classes[class_ids[i]])
+            object_lable = "{} : {:0.4f}".format(classes[class_ids[i]], confidences[i])
+            # object_lable = "{}".format(classes[class_ids[i]])
             color = (255, 255, 0)
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
             cv2.putText(img, object_lable, (x, y), font, 2, color, 2)
